@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend do sistema de inventario",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joao neto pereira santana",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
