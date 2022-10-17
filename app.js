@@ -2,49 +2,33 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const bodyParser = require('body-parser');
-const rotausuario = require('./routes/routesUsuario');
+const cors = require('cors');
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-
-
-app.use("/usuarios", rotausuario)
-//app.use("/listapatrimonios",)
 app.use(morgan('dev'));
-// app.use("/somar", (req, res, next) => {
-//    let a = 26;
-//    let b = 5;
-//    let total = 0;
-//    total = a + b;
-//    console.log(total)
-//    res.status(200).send({
-//       resultado: total
-//    })
-// })
-// app.use("/nota", (req, res, next) => {
-//    let a = 7;
-//    let b = 7;
-//    let c = 7;
-//    let d = 7;
-//    let situacao = ""
-//    let total = a + b + c + d;
-//    let media = total / 4;
-//    if (media < 7) {
-//       situacao = "Reprovado"
-//    } else {
-//       situacao = "Aprovado"
-//    }
-//    // console.log(total)
-//    res.status(200).send({
-//       nome: "JOAO",
-//       nota1: a,
-//       nota2: b,
-//       nota3: c,
-//       nota4: d,
-//       resultado: total,
-//       media: media,
-//       situacao: situacao
-//    })
-// })
+const usuario = require('./routes/usuario');
+const empresa = require('./routes/empresa');
+const patrimonio = require('./routes/patrimonio');
+const setor = require('./routes/setor');
+const lotacao = require('./routes/lotacao');
+
+app.use((req,res,next)=>{
+   res.header('Access-Control-Allow-Origin','*');
+   res.header('Access-Control-Allow-Header','Origin,X-Requerested-with, Content-Type, Accept,Authorization');
+   if(req.method==='OPTIONS'){
+      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, DELETE');
+      return res.status(200).send({});
+   }
+   next();
+})
+
+app.use("/usuario", usuario);
+app.use("/empresas", empresa);
+app.use("/patrimonio", patrimonio);
+app.use("/setor", setor);
+app.use("/lotacao", lotacao);
+
 app.use((req, res, next) => {
    const erro = new Error("Não encontrado");
    erro.status(404);
@@ -54,7 +38,7 @@ app.use((error, req, res, next) => {
    res.status(error.status || 500);
    return res.json({
       erro: {
-         mensagem: message
+         mensagem:error.message
       }
    })
 })
