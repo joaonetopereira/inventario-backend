@@ -12,6 +12,7 @@ const empresa = require('./routes/empresa');
 const patrimonio = require('./routes/patrimonio');
 const setor = require('./routes/setor');
 const lotacao = require('./routes/lotacao');
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.use((req,res,next)=>{
    res.header('Access-Control-Allow-Origin','*');

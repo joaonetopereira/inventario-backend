@@ -82,6 +82,37 @@ const mysql = require("../mysql").pool;
 // }
 
 // para consultar um determinado cadastro
+router.get('/editar/:id', (req, res, next) => {
+    const id = req.params.id;
+   
+    mysql.getConnection((error, conn) => {
+        conn.query(
+            "SELECT * FROM `lotacao` WHERE codlot=?",[id],
+            (error, resultado, field) => {
+                conn.release();
+                if (error) {
+                    return res.status(500).send({
+                        error: error,
+                        response: null
+                    })
+                }
+                // const id = req.params.id;
+                // let listausuario = usuario.filter(value => value.id == id);
+                res.status(200).send({
+                    mensagem: `lista de lotação com id`,
+                    lotacao: resultado
+                })
+            }
+        )
+    })
+    // const id = req.params.id;
+    // let listausuario=lotacao.filter(value=>value.id==id);
+    // res.status(200).send({
+    //     mensagem: `lista de uma lotação com id:${id}`,
+    //     lotação: listausuario
+    // })
+})
+// para consultar um determinado cadastro
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
 
@@ -245,10 +276,10 @@ router.patch('/', (req, res, next) => {
     let msg = [];
     let i = 0;
     const id = req.body.id;
-    const idusu = req.body.idusu;
-    const idemp = req.body.idemp;
-    const idpat = req.body.idpat;
-    const idset = req.body.idset;
+    const idusu = req.body.idusuario;
+    const idemp = req.body.idempresa;
+    const idpat = req.body.idpatrimonio;
+    const idset = req.body.idsetor;
     const datalotacao = req.body.datalotacao;
     // let dadosalterados=lotacao.map((item)=>{
     //     if(item.id==id){
@@ -291,7 +322,7 @@ router.patch('/', (req, res, next) => {
         mysql.getConnection((error, conn) => {
             conn.query(
                 "update  `lotacao` set idUsuario=?,idpatrimonio=?,idSetor=?,idEmpresa=?,datalotacao=? where codlot=?",
-                [idusu,idemp,idpat,idset,datalotacao],
+                [idusu,idpat,idset,idemp,datalotacao,id],
                 (error, resultado, field) => {
                     conn.release();
                     if (error) {
@@ -303,7 +334,7 @@ router.patch('/', (req, res, next) => {
                     // const id = req.params.id;
                     // let listausuario = usuario.filter(value => value.id == id);
                     res.status(201).send({
-                        mensagem: `cadastro alterado com sucesso usuário`,
+                        mensagem: `cadastro alterado com sucesso`,
                         //usuario: resultado.insertId
                     })
                 }
